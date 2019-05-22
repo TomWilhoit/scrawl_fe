@@ -11,8 +11,8 @@ export default class App extends React.Component {
     };
   }
 
-  componentWillMount =  () => {
-      this.getStartLocation();
+  componentWillMount = async () => {
+    await this.getStartLocation();
   };
 
   getStartLocation = () => {
@@ -26,32 +26,28 @@ export default class App extends React.Component {
       error => console.log(error),
       { enableHighAccuracy: false, maximumAge: 1000 }
     );
-    console.log(this.state)
   };
 
   render() {
+    console.log(this.state);
     const { currentLatitude, currentLongitude } = this.state;
-    return (
-      <MapView
-        style={{
-          flex: 1
-        }}
-        initialRegion={{
-          latitude: currentLatitude,
-          longitude: currentLongitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        }}
-      />
-    );
+    if (currentLatitude == null) {
+      return <Text>Loading</Text>;
+    } else {
+      return (
+        <MapView
+          style={{
+            flex: 1
+          }}
+          initialRegion={{
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+            latitudeDelta: 0.000922,
+            longitudeDelta: 0.000421
+          }}
+          showsUserLocation={true}
+        />
+      );
+    }
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
