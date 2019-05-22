@@ -1,6 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { MapView } from "expo";
+import {  Permissions } from 'expo';
+
+
 
 export default class App extends React.Component {
   render() {
