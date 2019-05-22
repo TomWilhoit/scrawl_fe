@@ -1,3 +1,5 @@
+utils/key.js
+./app.json
 node_modules/**/*
 .expo/*
 npm-debug.*
@@ -5,3 +7,4 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+utils/key.js
