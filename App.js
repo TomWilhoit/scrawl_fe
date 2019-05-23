@@ -1,10 +1,16 @@
 import React from "react";
-import { StyleSheet, Text, View, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  TouchableOpacity
+} from "react-native";
 import { MapView } from "expo";
 import { Permissions } from "expo";
 import { fetchData } from "./utils/fetchData";
 import { apiKey } from "./utils/key";
-import { mapStyle} from "./styles"
+import { mapStyle } from "./styles";
 
 export default class App extends React.Component {
   constructor() {
@@ -32,7 +38,7 @@ export default class App extends React.Component {
       { enableHighAccuracy: false, maximumAge: 1000 }
     );
     console.log(this.state);
-    this.getStartLocationData();
+    // this.getStartLocationData();
   };
 
   getStartLocationData = async () => {
@@ -47,6 +53,9 @@ export default class App extends React.Component {
     }
   };
 
+  onPress = () => {
+    this.getStartLocation();
+  };
 
   render() {
     const { currentLatitude, currentLongitude } = this.state;
@@ -62,7 +71,9 @@ export default class App extends React.Component {
             backgroundColor: 183642
           }}
         >
-          <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 50 }}>Loading</Text>
+          <Text style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 50 }}>
+            Loading
+          </Text>
         </View>
       );
     } else {
@@ -77,22 +88,26 @@ export default class App extends React.Component {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              marginTop: 35,
+              marginTop: 35
             }}
           >
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>Scrawl</Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 30 }}
+            >
+              Scrawl
+            </Text>
           </View>
           <MapView
             customMapStyle={mapStyle}
             style={{
               marginTop: 5,
-              height: 400,
+              height: 400
             }}
             initialRegion={{
               latitude: currentLatitude,
               longitude: currentLongitude,
-              latitudeDelta: 0.000922,
-              longitudeDelta: 0.000421
+              latitudeDelta: 0.00922,
+              longitudeDelta: 0.00421
             }}
             showsUserLocation={true}
           />
@@ -102,15 +117,45 @@ export default class App extends React.Component {
               alignItems: "center"
             }}
           >
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>First Wall</Text>
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>Second Wall</Text>
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>Third Wall</Text>
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>Fourth Wall</Text>
-            <Text style={{ fontWeight: "bold", color: '#eaeaea', fontSize: 30 }}>Fifth Wall</Text>
+            <TouchableOpacity 
+            style={{
+              width: "100%",
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: '#e5625e'
+            }}
+            onPress={this.onPress}>
+              <Text style={{ fontWeight: "bold", color: "white", fontSize: 20 }}> Reload Chatrooms </Text>
+            </TouchableOpacity>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            >
+              First Wall
+            </Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            >
+              Second Wall
+            </Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            >
+              Third Wall
+            </Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            >
+              Fourth Wall
+            </Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            >
+              Fifth Wall
+            </Text>
           </View>
         </View>
       );
     }
-    
   }
 }
