@@ -7,4 +7,3 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
-utils/key.js
