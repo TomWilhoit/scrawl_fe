@@ -11,13 +11,15 @@ import { Permissions } from "expo";
 import { fetchData } from "./utils/fetchData";
 import { apiKey } from "./utils/key";
 import { mapStyle } from "./styles";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       currentLatitude: null,
-      currentLongitude: null
+      currentLongitude: null,
+      displayedPage: 'home'
     };
   }
 
@@ -29,6 +31,7 @@ export default class App extends React.Component {
   getStartLocation = async () => {
     await navigator.geolocation.getCurrentPosition(
       position => {
+        console.log(position);
         this.setState({
           currentLatitude: position.coords.latitude,
           currentLongitude: position.coords.longitude
@@ -53,13 +56,16 @@ export default class App extends React.Component {
     }
   };
 
-  onPress = () => {
-    this.getStartLocation();
+  onPress = num => {
+    this.setState({
+      displayedPage: `${num}`
+    })
+    console.log(this.state);
   };
 
   render() {
-    const { currentLatitude, currentLongitude } = this.state;
-    if (currentLatitude == null) {
+    const { currentLatitude, currentLongitude,displayedPage } = this.state;
+    if (currentLatitude == null && displayedPage === 'home') {
       return (
         <View
           style={{
@@ -76,7 +82,7 @@ export default class App extends React.Component {
           </Text>
         </View>
       );
-    } else {
+    } else if(currentLatitude !== null && displayedPage === 'home') {
       return (
         <View
           style={{
@@ -106,8 +112,8 @@ export default class App extends React.Component {
             initialRegion={{
               latitude: currentLatitude,
               longitude: currentLongitude,
-              latitudeDelta: 0.00922,
-              longitudeDelta: 0.00421
+              latitudeDelta: 0.000922,
+              longitudeDelta: 0.000421
             }}
             showsUserLocation={true}
           />
@@ -117,45 +123,126 @@ export default class App extends React.Component {
               alignItems: "center"
             }}
           >
-            <TouchableOpacity 
-            style={{
-              width: "100%",
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: '#e5625e'
-            }}
-            onPress={this.onPress}>
-              <Text style={{ fontWeight: "bold", color: "white", fontSize: 20 }}> Reload Chatrooms </Text>
+            <TouchableOpacity
+              style={{ width: "100%", backgroundColor: "lightblue" }}
+              onPress={() => this.onPress(1)}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  color: "#eaeaea",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                First Wall
+              </Text>
             </TouchableOpacity>
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+            <TouchableOpacity
+              style={{ width: "100%", backgroundColor: "lightblue" }}
+              onPress={() => this.onPress(2)}
             >
-              First Wall
-            </Text>
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#eaeaea",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                Second Wall
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ width: "100%", backgroundColor: "lightblue" }}
+              onPress={() => this.onPress(3)}
             >
-              Second Wall
-            </Text>
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#eaeaea",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                Third Wall
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ width: "100%", backgroundColor: "lightblue" }}
+              onPress={() => this.onPress(4)}
             >
-              Third Wall
-            </Text>
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#eaeaea",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                Fourth Wall
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ width: "100%", backgroundColor: "lightblue" }}
+              onPress={() => this.onPress(5)}
             >
-              Fourth Wall
-            </Text>
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 20, marginTop: 4 }}
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#eaeaea",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                Fifth Wall
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#e5625e"
+              }}
+              onPress={this.onPress}
             >
-              Fifth Wall
-            </Text>
+              <Text
+                style={{ fontWeight: "bold", color: "white", fontSize: 15 }}
+              >
+                Reload Walls
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       );
+    }else if(currentLatitude !== null && displayedPage !== 'Home'){
+      return(
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 100,
+            backgroundColor: 183642
+          }}
+        >
+        <TouchableOpacity onPress={() => this.onPress('home')}>
+          <Text>Back</Text>
+        </TouchableOpacity>
+          <Text style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 50 }}>
+            {displayedPage}
+          </Text>
+        </View>
+      )
     }
   }
 }
