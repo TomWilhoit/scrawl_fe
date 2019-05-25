@@ -1,17 +1,15 @@
 import React from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Platform,
   TouchableOpacity
 } from "react-native";
+import  Wall  from "./Wall"
 import { MapView } from "expo";
 import { Permissions } from "expo";
 import { fetchData } from "./utils/fetchData";
 import { apiKey } from "./utils/key";
 import { mapStyle } from "./styles";
-import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class App extends React.Component {
   constructor() {
@@ -225,23 +223,7 @@ export default class App extends React.Component {
       );
     }else if(currentLatitude !== null && displayedPage !== 'Home'){
       return(
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: 100,
-            backgroundColor: 183642
-          }}
-        >
-        <TouchableOpacity onPress={() => this.onPress('home')}>
-          <Text>Back</Text>
-        </TouchableOpacity>
-          <Text style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 50 }}>
-            {displayedPage}
-          </Text>
-        </View>
+        <Wall displayedPage={this.state.displayedPage}/>
       )
     }
   }
