@@ -223,7 +223,7 @@ export default class App extends React.Component {
       );
     }else if(currentLatitude !== null && displayedPage !== 'Home'){
       return(
-        <Wall displayedPage={this.state.displayedPage}/>
+        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage}/>
       )
     }
   }
