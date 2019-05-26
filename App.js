@@ -215,7 +215,7 @@ export default class App extends React.Component {
               <Text
                 style={{ fontWeight: "bold", color: "white", fontSize: 15 }}
               >
-                Reload Walls
+                Create a wall
               </Text>
             </TouchableOpacity>
           </View>
