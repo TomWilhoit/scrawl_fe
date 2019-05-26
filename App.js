@@ -1,15 +1,12 @@
 import React from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity
-} from "react-native";
-import  Wall  from "./Wall"
-import { MapView } from "expo";
+import { Text, View, TouchableOpacity} from "react-native";
+import Wall from "./Wall";
+import MapView, { Marker, Callout} from 'react-native-maps';
 import { Permissions } from "expo";
 import { fetchData } from "./utils/fetchData";
 import { apiKey } from "./utils/key";
 import { mapStyle } from "./styles";
+import WS from "react-native-websocket";
 
 export default class App extends React.Component {
   constructor() {
@@ -17,7 +14,39 @@ export default class App extends React.Component {
     this.state = {
       currentLatitude: null,
       currentLongitude: null,
-      displayedPage: 'home'
+      displayedPage: "home",
+      markers: [
+        {
+          latitude: 39.7653,
+          longitude: -104.9791,
+          title: "Improper City",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9793,
+          title: "Test 2",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9796,
+          title: "Test 3",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9799,
+          title: "Test 4",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9800,
+          title: "Scott likes meatballs",
+          subtitle: "Subtitle"
+        }
+      ]
     };
   }
 
@@ -57,13 +86,13 @@ export default class App extends React.Component {
   onPress = num => {
     this.setState({
       displayedPage: `${num}`
-    })
+    });
     console.log(this.state);
   };
 
   render() {
-    const { currentLatitude, currentLongitude,displayedPage } = this.state;
-    if (currentLatitude == null && displayedPage === 'home') {
+    const { currentLatitude, currentLongitude, displayedPage } = this.state;
+    if (currentLatitude == null && displayedPage === "home") {
       return (
         <View
           style={{
@@ -80,7 +109,7 @@ export default class App extends React.Component {
           </Text>
         </View>
       );
-    } else if(currentLatitude !== null && displayedPage === 'home') {
+    } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
           style={{
@@ -114,7 +143,21 @@ export default class App extends React.Component {
               longitudeDelta: 0.000421
             }}
             showsUserLocation={true}
-          />
+          >
+            {this.state.markers.map((marker, index) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude
+                }}
+                title={marker.title}
+                description={marker.subtitle}
+                onCalloutPress={() => this.onPress(index + 1)}
+                on
+              />
+            ))}
+          </MapView>
           <View
             style={{
               justifyContent: "center",
@@ -135,7 +178,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                First Wall
+                {this.state.markers[0].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -151,7 +194,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                Second Wall
+                {this.state.markers[1].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -167,7 +210,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                Third Wall
+                {this.state.markers[2].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -183,7 +226,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                Fourth Wall
+                {this.state.markers[3].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -199,7 +242,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                Fifth Wall
+                {this.state.markers[4].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -221,10 +264,10 @@ export default class App extends React.Component {
           </View>
         </View>
       );
-    }else if(currentLatitude !== null && displayedPage !== 'Home'){
-      return(
-        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage}/>
-      )
+    } else if (currentLatitude !== null && displayedPage !== "Home") {
+      return (
+        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage} />
+      );
     }
   }
 }
