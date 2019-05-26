@@ -2,10 +2,8 @@ import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import Wall from "./Wall";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { Permissions } from "expo";
-import { fetchData } from "./utils/fetchData";
-import { apiKey } from "./utils/key";
 import { mapStyle } from "./styles";
+import FontAwesome, { Icons } from "react-native-fontawesome";
 import WS from "react-native-websocket";
 import { Font } from "expo";
 
@@ -13,10 +11,22 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      randomNum: 1,
       fontLoaded: false,
       currentLatitude: null,
       currentLongitude: null,
       displayedPage: "home",
+      openers: [
+        {
+          quote: `Maybe it will work when I'm fully dead inside`,
+          author: "Peregrine"
+        },
+        {
+          quote: `React Native is like a friend you think you know, but you don't.`,
+          author: "Tommy"
+        },
+        { quote: `I f****** hate Django`, author: "Scott" }
+      ],
       markers: [
         {
           latitude: 39.7653,
@@ -54,15 +64,15 @@ export default class App extends React.Component {
 
   componentWillMount = async () => {
     const LatLong = await this.getStartLocation();
-    this.getStartLocationData(LatLong);
     await Font.loadAsync({
       PermanentMarker: require("./assets/fonts/PermanentMarker-Regular.ttf")
     });
-
     this.setState({ fontLoaded: true });
+    const randomNum = Math.floor(Math.random() * (2 + 1));
+    await this.setState({
+      randomNum: randomNum
+    });
   };
-
-  componentDidMount = async () => {};
 
   getStartLocation = async () => {
     await navigator.geolocation.getCurrentPosition(
@@ -106,11 +116,25 @@ export default class App extends React.Component {
             <Text
               style={{
                 fontFamily: "PermanentMarker",
-                fontSize: 56,
-                color: "white"
+                fontSize: 20,
+                color: "white",
+                margin: 15
               }}
             >
-              Loading
+              {this.state.openers[this.state.randomNum].quote}
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "PermanentMarker",
+                  fontSize: 20,
+                  color: "white",
+                  marginLeft: 20,
+                  width: "100%"
+                }}
+              >
+                {"\n"}
+                {"\n"}-{this.state.openers[this.state.randomNum].author}{" "}
+              </Text>
             </Text>
           ) : null}
         </View>
@@ -294,22 +318,22 @@ export default class App extends React.Component {
                 height: 60,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "#87b38d",
+                backgroundColor: "#87b38d"
               }}
               onPress={this.onPress}
             >
-                {this.state.fontLoaded ? (
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      color: "#f7f9f9",
-                      fontSize: 15,
-                      fontFamily: "PermanentMarker"
-                    }}
-                  >
-                    Create A Wall
-                  </Text>
-                ) : null}
+              {this.state.fontLoaded ? (
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: "#f7f9f9",
+                    fontSize: 15,
+                    fontFamily: "PermanentMarker"
+                  }}
+                >
+                  Create A Wall
+                </Text>
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>
