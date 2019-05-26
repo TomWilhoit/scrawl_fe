@@ -1,35 +1,72 @@
 import React from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity
-} from "react-native";
-import  Wall  from "./Wall"
-import { MapView } from "expo";
+import { Text, View, TouchableOpacity } from "react-native";
+import Wall from "./Wall";
+import MapView, { Marker, Callout } from "react-native-maps";
 import { Permissions } from "expo";
 import { fetchData } from "./utils/fetchData";
 import { apiKey } from "./utils/key";
 import { mapStyle } from "./styles";
+import WS from "react-native-websocket";
+import { Font } from "expo";
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      fontLoaded: false,
       currentLatitude: null,
       currentLongitude: null,
-      displayedPage: 'home'
+      displayedPage: "home",
+      markers: [
+        {
+          latitude: 39.7653,
+          longitude: -104.9791,
+          title: "Improper City",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9793,
+          title: "Test 2",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9796,
+          title: "Test 3",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.9799,
+          title: "Test 4",
+          subtitle: "Subtitle"
+        },
+        {
+          latitude: 39.7653,
+          longitude: -104.98,
+          title: "Scott likes meatballs",
+          subtitle: "Subtitle"
+        }
+      ]
     };
   }
 
   componentWillMount = async () => {
     const LatLong = await this.getStartLocation();
     this.getStartLocationData(LatLong);
+    await Font.loadAsync({
+      PermanentMarker: require("./assets/fonts/PermanentMarker-Regular.ttf")
+    });
+
+    this.setState({ fontLoaded: true });
   };
+
+  componentDidMount = async () => {};
 
   getStartLocation = async () => {
     await navigator.geolocation.getCurrentPosition(
       position => {
-        console.log(position);
         this.setState({
           currentLatitude: position.coords.latitude,
           currentLongitude: position.coords.longitude
@@ -38,32 +75,22 @@ export default class App extends React.Component {
       error => console.log(error),
       { enableHighAccuracy: false, maximumAge: 1000 }
     );
-    console.log(this.state);
-    // this.getStartLocationData();
-  };
-
-  getStartLocationData = async () => {
-    if (this.state.currentLongitude === null) {
-      console.log("still null");
-    } else {
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
-        this.state.currentLatitude
-      },${this.state.currentLongitude}&key=${apiKey}`;
-      const result = await fetchData(url);
-      console.log(result);
-    }
   };
 
   onPress = num => {
     this.setState({
       displayedPage: `${num}`
-    })
-    console.log(this.state);
+    });
   };
 
   render() {
-    const { currentLatitude, currentLongitude,displayedPage } = this.state;
-    if (currentLatitude == null && displayedPage === 'home') {
+    const {
+      currentLatitude,
+      currentLongitude,
+      displayedPage,
+      fontLoaded
+    } = this.state;
+    if (currentLatitude == null && displayedPage === "home") {
       return (
         <View
           style={{
@@ -72,20 +99,28 @@ export default class App extends React.Component {
             justifyContent: "center",
             alignItems: "center",
             height: 100,
-            backgroundColor: 183642
+            backgroundColor: "#006992"
           }}
         >
-          <Text style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 50 }}>
-            Loading
-          </Text>
+          {this.state.fontLoaded ? (
+            <Text
+              style={{
+                fontFamily: "PermanentMarker",
+                fontSize: 56,
+                color: "white"
+              }}
+            >
+              Loading
+            </Text>
+          ) : null}
         </View>
       );
-    } else if(currentLatitude !== null && displayedPage === 'home') {
+    } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
           style={{
             flex: 1,
-            backgroundColor: 183642
+            backgroundColor: "#006992"
           }}
         >
           <View
@@ -95,11 +130,18 @@ export default class App extends React.Component {
               marginTop: 35
             }}
           >
-            <Text
-              style={{ fontWeight: "bold", color: "#eaeaea", fontSize: 30 }}
-            >
-              Scrawl
-            </Text>
+            {this.state.fontLoaded ? (
+              <Text
+                style={{
+                  fontFamily: "PermanentMarker",
+                  fontSize: 30,
+                  color: "#f7f9f9",
+                  fontSize: 30
+                }}
+              >
+                Scrawl
+              </Text>
+            ) : null}
           </View>
           <MapView
             customMapStyle={mapStyle}
@@ -114,7 +156,21 @@ export default class App extends React.Component {
               longitudeDelta: 0.000421
             }}
             showsUserLocation={true}
-          />
+          >
+            {this.state.markers.map((marker, index) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude
+                }}
+                title={marker.title}
+                description={marker.subtitle}
+                onCalloutPress={() => this.onPress(index + 1)}
+                on
+              />
+            ))}
+          </MapView>
           <View
             style={{
               justifyContent: "center",
@@ -122,7 +178,13 @@ export default class App extends React.Component {
             }}
           >
             <TouchableOpacity
-              style={{ width: "100%", backgroundColor: "lightblue" }}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
               onPress={() => this.onPress(1)}
             >
               <Text
@@ -130,76 +192,100 @@ export default class App extends React.Component {
                   textAlign: "center",
                   justifyContent: "center",
                   fontWeight: "bold",
-                  color: "#eaeaea",
+                  color: "#f7f9f9",
                   fontSize: 20,
                   marginTop: 4
                 }}
               >
-                First Wall
+                {this.state.markers[0].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ width: "100%", backgroundColor: "lightblue" }}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
               onPress={() => this.onPress(2)}
             >
               <Text
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: "#eaeaea",
+                  color: "#f7f9f9",
                   fontSize: 20,
                   marginTop: 4
                 }}
               >
-                Second Wall
+                {this.state.markers[1].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ width: "100%", backgroundColor: "lightblue" }}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
               onPress={() => this.onPress(3)}
             >
               <Text
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: "#eaeaea",
+                  color: "#f7f9f9",
                   fontSize: 20,
                   marginTop: 4
                 }}
               >
-                Third Wall
+                {this.state.markers[2].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ width: "100%", backgroundColor: "lightblue" }}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
               onPress={() => this.onPress(4)}
             >
               <Text
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: "#eaeaea",
+                  color: "#f7f9f9",
                   fontSize: 20,
                   marginTop: 4
                 }}
               >
-                Fourth Wall
+                {this.state.markers[3].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ width: "100%", backgroundColor: "lightblue" }}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
               onPress={() => this.onPress(5)}
             >
               <Text
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: "#eaeaea",
+                  color: "#f7f9f9",
                   fontSize: 20,
                   marginTop: 4
                 }}
               >
-                Fifth Wall
+                {this.state.markers[4].title}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -208,23 +294,30 @@ export default class App extends React.Component {
                 height: 60,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "#e5625e"
+                backgroundColor: "#87b38d",
               }}
               onPress={this.onPress}
             >
-              <Text
-                style={{ fontWeight: "bold", color: "white", fontSize: 15 }}
-              >
-                Create a wall
-              </Text>
+                {this.state.fontLoaded ? (
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: "#f7f9f9",
+                      fontSize: 15,
+                      fontFamily: "PermanentMarker"
+                    }}
+                  >
+                    Create A Wall
+                  </Text>
+                ) : null}
             </TouchableOpacity>
           </View>
         </View>
       );
-    }else if(currentLatitude !== null && displayedPage !== 'Home'){
-      return(
-        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage}/>
-      )
+    } else if (currentLatitude !== null && displayedPage !== "Home") {
+      return (
+        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage} />
+      );
     }
   }
 }
