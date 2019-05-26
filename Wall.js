@@ -7,9 +7,10 @@ export default class Wall extends React.Component {
     super(props);
     this.state = {
       text: "",
-      comments: ['Example comment 1','Example comment 2', 'Example comment3']
+      comments: ['Example comment 1','Example comment 2', 'Example comment 3']
     };
   }
+  
 
   onSubmit = () => {
     const newComment = this.state.text;
@@ -48,15 +49,27 @@ export default class Wall extends React.Component {
           flex: 1,
           flexDirection: "column",
           justifyContent: "center",
-          backgroundColor: 183642
+          backgroundColor: '#006992'
         }}
       >
+          <TouchableOpacity style={{height: 25, alignItems:'center'}} onPress={() => this.props.onPress("home")}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontWeight: "bold",
+              color: "white",
+              fontSize: 15
+            }}
+          >
+             Click me to go back 
+          </Text>
+        </TouchableOpacity>
         <View
           style={{
-            height: 300,
+            height: 400,
             backgroundColor: "lightblue",
             width: "100%",
-            marginTop: -150
+            marginTop: 10
           }}
         >
           {this.displayComments()}
@@ -72,7 +85,7 @@ export default class Wall extends React.Component {
           onChangeText={text => this.setState({ text })}
         />
         <TouchableOpacity
-          style={{ height: 50, backgroundColor: "lightgreen", width: "100%" }}
+          style={{ height: 100, backgroundColor: "#87b38d", width: "100%", justifyContent: 'center', marginBottom: -57 }}
           onPress={() => this.onSubmit("home")}
         >
           <Text
@@ -80,23 +93,10 @@ export default class Wall extends React.Component {
               textAlign: "center",
               fontWeight: "bold",
               color: "white",
-              fontSize: 25
+              fontSize: 40
             }}
           >
             Submit
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.onPress("home")}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontWeight: "bold",
-              color: "white",
-              fontSize: 15,
-              marginTop: 25
-            }}
-          >
-            Back
           </Text>
         </TouchableOpacity>
       </View>
