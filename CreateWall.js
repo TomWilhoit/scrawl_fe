@@ -1,13 +1,13 @@
 import React from "react";
 import { Text, View, TouchableOpacity, TextInput } from "react-native";
-import { Icon } from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-export default class Wall extends React.Component {
+export default class CreateWall extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       text: "",
-      comments: ["Example comment 1", "Example comment 2", "Example comment 3"]
+      comments: []
     };
   }
 
@@ -57,17 +57,16 @@ export default class Wall extends React.Component {
             >
               <Icon name="angle-left" size={30} color="white"/>
             </TouchableOpacity>
-        <Text
+        <TextInput
           style={{
             height: 45,
             backgroundColor: "white",
             width: "100%",
-            textAlign: "center",
-            fontSize: 25,
-            alignItems: 'center'
-          }}>
-          {this.props.currentWall.title}
-          </Text>
+            textAlign: "center"
+          }}
+          placeholder="Name this wall (Your location helps)."
+          onChangeText={title => this.setState({ title })}
+        />
         <View
           style={{
             height: 200,

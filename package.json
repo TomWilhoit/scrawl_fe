@@ -7,7 +7,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest --watch --coverage=true --changedSince=origin/master -u"
+  },
+  "test": {
+    "preset": "react-native"
   },
   "rnpm": {
     "assets": [
@@ -16,15 +20,41 @@
   },
   "dependencies": {
     "expo": "^32.0.0",
+    "jest": "^24.8.0",
+    "jest-enzyme": "^7.0.2",
     "react": "16.5.0",
+    "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-fontawesome": "^6.0.1",
     "react-native-maps": "^0.24.2",
     "react-native-vector-icons": "^6.4.2",
-    "react-native-websocket": "^1.0.2"
+    "react-native-websocket": "^1.0.2",
+    "react-scripts": "^3.0.1"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.2",
+    "enzyme-to-json": "^3.3.5",
+    "jest-expo": "^32.0.1",
+    "react-test-renderer": "^16.8.6"
   },
-  "private": true
+  "private": true,
+  "jest": {
+    "preset": "jest-expo",
+    "setupFilesAfterEnv": [ 
+      "<rootDir>setupTests.js" 
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|react-clone-referenced-element|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|sentry-expo|native-base))"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/jest.setup.js",
+      "!**/utils/key.js"
+    ]
+  }
 }

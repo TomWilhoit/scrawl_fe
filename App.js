@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import Wall from "./Wall";
-import MapView, { Marker, Callout } from "react-native-maps";
+import CreateWall from "./CreateWall";
+import MapView, { Marker} from "react-native-maps";
 import { mapStyle } from "./styles";
-import FontAwesome, { Icons } from "react-native-fontawesome";
 import WS from "react-native-websocket";
 import { Font } from "expo";
 
@@ -15,6 +15,12 @@ export default class App extends React.Component {
       fontLoaded: false,
       currentLatitude: null,
       currentLongitude: null,
+      currentWall: {
+        latitude: 39.7653,
+        longitude: -104.9791,
+        title: "Improper City",
+        subtitle: "Subtitle"
+      },
       displayedPage: "home",
       openers: [
         {
@@ -89,7 +95,8 @@ export default class App extends React.Component {
 
   onPress = num => {
     this.setState({
-      displayedPage: `${num}`
+      displayedPage: `${num}`,
+      currentWall: this.state.markers[num - 1]
     });
   };
 
@@ -139,6 +146,8 @@ export default class App extends React.Component {
           ) : null}
         </View>
       );
+    } else if (displayedPage === "CreateWall") {
+      return <CreateWall onPress={this.onPress}/>;
     } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
@@ -320,7 +329,7 @@ export default class App extends React.Component {
                 alignItems: "center",
                 backgroundColor: "#87b38d"
               }}
-              onPress={this.onPress}
+              onPress={() => this.onPress("CreateWall")}
             >
               {this.state.fontLoaded ? (
                 <Text
@@ -340,7 +349,7 @@ export default class App extends React.Component {
       );
     } else if (currentLatitude !== null && displayedPage !== "Home") {
       return (
-        <Wall onPress={this.onPress} displayedPage={this.state.displayedPage} />
+        <Wall currentWall={this.state.currentWall} onPress={this.onPress} displayedPage={this.state.displayedPage} />
       );
     }
   }
