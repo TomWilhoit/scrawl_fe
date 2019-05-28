@@ -1,3 +1,4 @@
+workflows:
 version: 2
 jobs:
   node:
@@ -8,15 +9,3 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
-
-workflows:
-  version: 2
-  node-android-ios:
-    jobs:
-      - node
-      - android:
-          requires:
-            - node
-      - ios:
-          requires:
-            - node
