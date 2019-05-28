@@ -1,14 +1,13 @@
 import React from "react";
 import { Text, View, TouchableOpacity, TextInput } from "react-native";
-import  Icon  from "react-native-vector-icons/FontAwesome";
-var Filter = require("bad-words");
+import Icon from "react-native-vector-icons/FontAwesome";
 
-export default class Wall extends React.Component {
+export default class CreateWall extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       text: "",
-      comments: ["shit", "Example comment 2", "Example comment 3"]
+      comments: []
     };
   }
 
@@ -21,11 +20,8 @@ export default class Wall extends React.Component {
 
   displayComments = () => {
     if (this.state.comments.length) {
-      filter = new Filter();
       const commentsDisplay = this.state.comments.map((comment, index) => {
-        let cleanComment = filter.clean(comment);
-        // console.log(cleanComment)
-        return <Text key={index}>{cleanComment}</Text>;
+        return <Text key={index}>{comment}</Text>;
       });
       return commentsDisplay;
     } else if (!this.state.comments.length) {
@@ -54,30 +50,23 @@ export default class Wall extends React.Component {
           backgroundColor: "#006992"
         }}
       >
-        <TouchableOpacity
-          style={{
-            height: 35,
-            marginTop: 25,
-            justifyContent: "center",
-            paddingLeft: 15
-          }}
-          onPress={() => this.props.onPress("home")}
-          textAlign="left"
-        >
-          <Icon name="angle-left" size={30} color="white" />
-        </TouchableOpacity>
-        <Text
+            <TouchableOpacity
+              style={{ height: 35, marginTop: 25, justifyContent: 'center', paddingLeft: 15}}
+              onPress={() => this.props.onPress("home")}
+              textAlign="left"
+            >
+              <Icon name="angle-left" size={30} color="white"/>
+            </TouchableOpacity>
+        <TextInput
           style={{
             height: 45,
             backgroundColor: "white",
             width: "100%",
-            textAlign: "center",
-            fontSize: 25,
-            alignItems: "center"
+            textAlign: "center"
           }}
-        >
-          {this.props.currentWall.title}
-        </Text>
+          placeholder="Name this wall (Your location helps)."
+          onChangeText={title => this.setState({ title })}
+        />
         <View
           style={{
             height: 200,
@@ -93,7 +82,7 @@ export default class Wall extends React.Component {
             backgroundColor: "white",
             width: "100%",
             textAlign: "center",
-            justifyContent: "center"
+            justifyContent: 'center'
           }}
           placeholder="Say something, anything bruh it's your world."
           onChangeText={text => this.setState({ text })}
@@ -120,6 +109,7 @@ export default class Wall extends React.Component {
           </Text>
         </TouchableOpacity>
       </View>
+
     );
   }
 }

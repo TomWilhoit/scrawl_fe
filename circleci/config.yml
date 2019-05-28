@@ -29,7 +29,7 @@ jobs:
           name: jest tests
           command: |
             mkdir -p test-results/jest
-            npm test passWithNoTests --forceExit
+            npm test
           environment:
             JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
 

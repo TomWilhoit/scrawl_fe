@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateWall should match the snapshot when on the Home page 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#006992",
+      "flex": 1,
+      "flexDirection": "column",
+    }
+  }
+>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+    style={
+      Object {
+        "height": 35,
+        "justifyContent": "center",
+        "marginTop": 25,
+        "paddingLeft": 15,
+      }
+    }
+    textAlign="left"
+  >
+    <Icon
+      allowFontScaling={false}
+      color="white"
+      name="angle-left"
+      size={30}
+    />
+  </TouchableOpacity>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="Name this wall (Your location helps)."
+    style={
+      Object {
+        "backgroundColor": "white",
+        "height": 45,
+        "textAlign": "center",
+        "width": "100%",
+      }
+    }
+    underlineColorAndroid="transparent"
+  />
+  <Component
+    style={
+      Object {
+        "backgroundColor": "lightblue",
+        "height": 200,
+        "width": "100%",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#eaeaea",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "marginTop": 130,
+          "textAlign": "center",
+        }
+      }
+    >
+      No Comments Yet!
+    </Component>
+  </Component>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="Say something, anything bruh it's your world."
+    style={
+      Object {
+        "backgroundColor": "white",
+        "height": 60,
+        "justifyContent": "center",
+        "textAlign": "center",
+        "width": "100%",
+      }
+    }
+    underlineColorAndroid="transparent"
+  />
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#87b38d",
+        "height": 100,
+        "justifyContent": "center",
+        "marginBottom": -57,
+        "width": "100%",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 40,
+          "fontWeight": "bold",
+          "textAlign": "center",
+        }
+      }
+    >
+      Submit
+    </Component>
+  </TouchableOpacity>
+</Component>
+`;
