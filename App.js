@@ -146,8 +146,8 @@ export default class App extends React.Component {
           ) : null}
         </View>
       );
-    // } else if (displayedPage === "CreateWall") {
-    //   return <CreateWall onPress={this.onPress}/>;
+    } else if (displayedPage === "CreateWall") {
+      return <CreateWall onPress={this.onPress}/>;
     } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View

@@ -24,7 +24,6 @@ export default class Wall extends React.Component {
       filter = new Filter();
       const commentsDisplay = this.state.comments.map((comment, index) => {
         let cleanComment = filter.clean(comment);
-        // console.log(cleanComment)
         return <Text key={index}>{cleanComment}</Text>;
       });
       return commentsDisplay;

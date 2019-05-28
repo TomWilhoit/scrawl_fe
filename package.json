@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "jest --watch --coverage=true --changedSince=origin/master -u"
+    "test": "jest -u --forceExit"
   },
   "test": {
     "preset": "react-native"
