@@ -2,21 +2,13 @@ version: 2
 jobs:
   node:
     one:
-        docker:
-        - image: circleci/node:8
-            steps:
-            - checkout
-            - run: npm install
-    two:
     docker:
       - image: circleci/node:8
     steps:
       - checkout
+      - run: npm install
       - run: npm test
 
-    
-
-    
 workflows:
   version: 2
   node-android-ios:
