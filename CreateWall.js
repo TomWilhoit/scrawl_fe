@@ -42,6 +42,7 @@ export default class CreateWall extends React.Component {
   };
 
   render() {
+    console.log(this.props.currentWall)
     return (
       <View
         style={{
