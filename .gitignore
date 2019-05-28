@@ -8,4 +8,5 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
-coverage/
+.coverage/*
+coverage/lcov-report
