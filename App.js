@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import Wall from "./Wall";
+import  Wall  from "./Wall";
 import CreateWall from "./CreateWall";
 import MapView, { Marker} from "react-native-maps";
 import { mapStyle } from "./styles";
@@ -146,8 +146,8 @@ export default class App extends React.Component {
           ) : null}
         </View>
       );
-    } else if (displayedPage === "CreateWall") {
-      return <CreateWall onPress={this.onPress}/>;
+    // } else if (displayedPage === "CreateWall") {
+    //   return <CreateWall onPress={this.onPress}/>;
     } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
@@ -349,7 +349,7 @@ export default class App extends React.Component {
       );
     } else if (currentLatitude !== null && displayedPage !== "Home") {
       return (
-        <Wall currentWall={this.state.currentWall} onPress={this.onPress} displayedPage={this.state.displayedPage} />
+        <Wall currentWall={this.state.currentWall} onPress={this.onPress} displayedPage={this.state.displayedPage}/>
       );
     }
   }

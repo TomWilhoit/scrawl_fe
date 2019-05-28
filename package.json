@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "bad-words": "^3.0.2",
     "expo": "^32.0.0",
     "jest": "^24.8.0",
     "jest-enzyme": "^7.0.2",
@@ -42,8 +43,8 @@
   "private": true,
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [ 
-      "<rootDir>setupTests.js" 
+    "setupFilesAfterEnv": [
+      "<rootDir>setupTests.js"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|react-clone-referenced-element|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|sentry-expo|native-base))"
@@ -54,7 +55,8 @@
       "!**/coverage/**",
       "!**/node_modules/**",
       "!**/jest.setup.js",
-      "!**/utils/key.js"
+      "!**/utils/key.js",
+      "!**/babel.config.js"
     ]
   }
 }
