@@ -1,46 +1,88 @@
 import React from "react";
 import { Text, View, TouchableOpacity, TextInput } from "react-native";
-import  Icon  from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 var Filter = require("bad-words");
 
 export default class Wall extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      key: null,
       text: "",
-      comments: ["shit", "Example comment 2", "Example comment 3"]
+      comments: []
     };
   }
 
-  onSubmit = () => {
+  componentDidMount = () => {
+    this.gatherComments();
+  };
+
+  gatherComments = async () => {
+    const pk = this.props.currentWall.pk;
+    const url = `http://127.0.0.1:8000/api/v1/walls/${pk}`;
+    try {
+      const response = await fetch(url);
+      let responseJson = await response.json();
+      this.setState({
+        comments: responseJson.comments
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  onSubmit = async () => {
     const newComment = this.state.text;
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/JSON"
+      },
+      body: JSON.stringify({ comment: newComment })
+    };
     this.setState({
       comments: [...this.state.comments, newComment]
     });
+    const pk = this.props.currentWall.pk;
+    const url = `http://localhost:8000/api/v1/walls/${pk}/comments`;
+    try {
+      const response = await fetch(url, options);
+      let responseJson = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   displayComments = () => {
-    if (this.state.comments.length) {
-      filter = new Filter();
-      const commentsDisplay = this.state.comments.map((comment, index) => {
-        let cleanComment = filter.clean(comment);
-        return <Text key={index}>{cleanComment}</Text>;
-      });
-      return commentsDisplay;
-    } else if (!this.state.comments.length) {
-      return (
-        <Text
-          style={{
-            marginTop: 130,
-            textAlign: "center",
-            fontWeight: "bold",
-            color: "#eaeaea",
-            fontSize: 20
-          }}
-        >
-          No Comments Yet!
-        </Text>
-      );
+    const check = this.props.checkProximity(
+      this.props.currentWall.lat,
+      this.props.currentWall.lng
+    );
+    if (check === true) {
+      if (this.state.comments.length > 0) {
+        filter = new Filter();
+        const commentsDisplay = this.state.comments.map((comment, index) => {
+          let cleanComment = filter.clean(comment);
+          return <Text key={index}>{cleanComment}</Text>;
+        });
+        return commentsDisplay;
+      } else {
+        return (
+          <Text
+            style={{
+              marginTop: 130,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#eaeaea",
+              fontSize: 20
+            }}
+          >
+            No Comments Yet!
+          </Text>
+        );
+      }
+    } else {
+      return <Text>You are too far away to view this wall.</Text>;
     }
   };
 
@@ -53,6 +95,7 @@ export default class Wall extends React.Component {
           backgroundColor: "#006992"
         }}
       >
+        <Text>{this.props.currentWall.name}</Text>
         <TouchableOpacity
           style={{
             height: 35,
