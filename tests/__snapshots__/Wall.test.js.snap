@@ -10,6 +10,7 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
     }
   }
 >
+  <Component />
   <TouchableOpacity
     activeOpacity={0.2}
     onPress={[Function]}
@@ -23,7 +24,8 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
     }
     textAlign="left"
   >
-    <Component
+    <Icon
+      allowFontScaling={false}
       color="white"
       name="angle-left"
       size={30}
@@ -52,20 +54,8 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
       }
     }
   >
-    <Component
-      key="0"
-    >
-      Example comment 1
-    </Component>
-    <Component
-      key="1"
-    >
-      Example comment 2
-    </Component>
-    <Component
-      key="2"
-    >
-      Example comment 3
+    <Component>
+      You are too far away to view this wall.
     </Component>
   </Component>
   <TextInput

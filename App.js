@@ -1,11 +1,12 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import  Wall  from "./Wall";
+import Wall from "./Wall";
 import CreateWall from "./CreateWall";
-import MapView, { Marker} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { mapStyle } from "./styles";
 import WS from "react-native-websocket";
 import { Font } from "expo";
+import { fetchData } from "./utils/fetchData";
 
 export default class App extends React.Component {
   constructor() {
@@ -15,12 +16,7 @@ export default class App extends React.Component {
       fontLoaded: false,
       currentLatitude: null,
       currentLongitude: null,
-      currentWall: {
-        latitude: 39.7653,
-        longitude: -104.9791,
-        title: "Improper City",
-        subtitle: "Subtitle"
-      },
+      currentWall: {},
       displayedPage: "home",
       openers: [
         {
@@ -33,38 +29,7 @@ export default class App extends React.Component {
         },
         { quote: `I f****** hate Django`, author: "Scott" }
       ],
-      markers: [
-        {
-          latitude: 39.7653,
-          longitude: -104.9791,
-          title: "Improper City",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9793,
-          title: "Test 2",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9796,
-          title: "Test 3",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9799,
-          title: "Test 4",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.98,
-          title: "Scott likes meatballs",
-          subtitle: "Subtitle"
-        }
-      ]
+      markers: []
     };
   }
 
@@ -80,9 +45,28 @@ export default class App extends React.Component {
     });
   };
 
+
+  getStartingWalls = async (lat, long) => {
+    const url = `http://127.0.0.1:8000/api/v1/walls/nearest?lat=${lat}&lng=${long}`;
+    try {
+      const response = await fetch(url);
+      let responseJson = await response.json();
+      this.setState({
+        markers: responseJson
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  
+
   getStartLocation = async () => {
-    await navigator.geolocation.getCurrentPosition(
-      position => {
+    return await navigator.geolocation.getCurrentPosition(
+      async position => {
+        await this.getStartingWalls(
+          position.coords.latitude,
+          position.coords.longitude
+        );
         this.setState({
           currentLatitude: position.coords.latitude,
           currentLongitude: position.coords.longitude
@@ -92,6 +76,16 @@ export default class App extends React.Component {
       { enableHighAccuracy: false, maximumAge: 1000 }
     );
   };
+
+  checkProximity = (lat, lng) => {
+    const wallLat= lat
+    const wallLng= lng
+    if(((wallLat + 0.0015 >= this.state.currentLatitude) || (wallLat + 0.0015 >= this.state.currentLatitude)) && ((wallLng - 0.0015 <= this.state.currentLongitude) || (wallLng - 0.0015 <= this.state.currentLongitude)) ){
+      return true
+    }else{
+      return false
+    }
+  }
 
   onPress = num => {
     this.setState({
@@ -147,7 +141,7 @@ export default class App extends React.Component {
         </View>
       );
     } else if (displayedPage === "CreateWall") {
-      return <CreateWall onPress={this.onPress}/>;
+      return <CreateWall checkProximity={this.checkProximity} lat={this.state.currentLatitude} lng={this.state.currentLongitude} onPress={this.onPress} />;
     } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
@@ -194,11 +188,10 @@ export default class App extends React.Component {
               <Marker
                 key={index}
                 coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude
+                  latitude: marker.lat,
+                  longitude: marker.lng
                 }}
-                title={marker.title}
-                description={marker.subtitle}
+                title={marker.name}
                 onCalloutPress={() => this.onPress(index + 1)}
                 on
               />
@@ -230,7 +223,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                {this.state.markers[0].title}
+                {this.state.markers[0].name}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -252,7 +245,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                {this.state.markers[1].title}
+                {this.state.markers[1].name}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -274,7 +267,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                {this.state.markers[2].title}
+                {this.state.markers[2].name}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -296,7 +289,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                {this.state.markers[3].title}
+                {this.state.markers[3].name}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -318,7 +311,7 @@ export default class App extends React.Component {
                   marginTop: 4
                 }}
               >
-                {this.state.markers[4].title}
+                {this.state.markers[4].name}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -349,7 +342,12 @@ export default class App extends React.Component {
       );
     } else if (currentLatitude !== null && displayedPage !== "Home") {
       return (
-        <Wall currentWall={this.state.currentWall} onPress={this.onPress} displayedPage={this.state.displayedPage}/>
+        <Wall
+          checkProximity={this.checkProximity}
+          currentWall={this.state.currentWall}
+          onPress={this.onPress}
+          displayedPage={this.state.displayedPage}
+        />
       );
     }
   }

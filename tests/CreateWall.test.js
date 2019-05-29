@@ -16,8 +16,10 @@ describe("CreateWall", () => {
 
   it("should have default state", () => {
     expect(wrapper.state()).toEqual({
+      title:"",
       text: "",
-      comments: []
+      comments: [],
+      tooClose: 'Submit'
     });
-  });
 });
+})

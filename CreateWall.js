@@ -6,17 +6,60 @@ export default class CreateWall extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title:"",
       text: "",
-      comments: []
+      comments: [],
+      tooClose: 'Submit'
     };
   }
 
-  onSubmit = () => {
-    const newComment = this.state.text;
-    this.setState({
-      comments: [...this.state.comments, newComment]
-    });
+  gatherComments = async () => {
+    const pk = this.props.currentWall.pk;
+    const url = `http://127.0.0.1:8000/api/v1/walls/${pk}`;
+    try {
+      const response = await fetch(url);
+      let responseJson = await response.json();
+      this.setState({
+        comments: responseJson.comments
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  onSubmit = async () => {
+      const newWall = this.state.title
+      const newComment = this.state.text;
+      const lat = this.props.lat;
+      const lng = this.props.lng;
+      const check = this.props.checkProximity(lat, lng)
+      console.log(check)
+      if(!check){
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/JSON"
+          },
+          body: JSON.stringify({ comment: newComment, name: newWall, lat: lat, lng: lng })
+        };
+        const url = `http://localhost:8000/api/v1/walls`;
+        try {
+          const response = await fetch(url, options);
+          let responseJson = await response.json();
+        } catch (error) {
+          console.log(error);
+        }
+        this.props.onPress('home')
+      }
+      else{
+        return(
+          this.setState({
+            tooClose: 'You are too close. Try exploring!'
+          })
+        )
+      }
+    };
+
 
   displayComments = () => {
     if (this.state.comments.length) {
@@ -42,7 +85,6 @@ export default class CreateWall extends React.Component {
   };
 
   render() {
-    console.log(this.props.currentWall)
     return (
       <View
         style={{
@@ -96,7 +138,7 @@ export default class CreateWall extends React.Component {
             justifyContent: "center",
             marginBottom: -57
           }}
-          onPress={() => this.onSubmit("home")}
+          onPress={() => this.onSubmit()}
         >
           <Text
             style={{
@@ -106,7 +148,7 @@ export default class CreateWall extends React.Component {
               fontSize: 40
             }}
           >
-            Submit
+            {this.state.tooClose}
           </Text>
         </TouchableOpacity>
       </View>

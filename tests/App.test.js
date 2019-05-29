@@ -21,12 +21,7 @@ describe("App", () => {
       fontLoaded: false,
       currentLatitude: null,
       currentLongitude: null,
-      currentWall: {
-        latitude: 39.7653,
-        longitude: -104.9791,
-        title: "Improper City",
-        subtitle: "Subtitle"
-      },
+      currentWall: {},
       displayedPage: "home",
       openers: [
         {
@@ -39,38 +34,7 @@ describe("App", () => {
         },
         { quote: `I f****** hate Django`, author: "Scott" }
       ],
-      markers: [
-        {
-          latitude: 39.7653,
-          longitude: -104.9791,
-          title: "Improper City",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9793,
-          title: "Test 2",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9796,
-          title: "Test 3",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.9799,
-          title: "Test 4",
-          subtitle: "Subtitle"
-        },
-        {
-          latitude: 39.7653,
-          longitude: -104.98,
-          title: "Scott likes meatballs",
-          subtitle: "Subtitle"
-        }
-      ]
+      markers: []
     });
   });
 
