@@ -14,11 +14,19 @@ describe("Wall", () => {
   }
   
   beforeEach(() => {
-    wrapper = shallow(<Wall currentWall={mockWall} />);
+    wrapper = shallow(<Wall checkProximity={mockFunc} currentWall={mockWall} />);
   });
 
   it('should match the snapshot when on the Home page', () => {
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it("should have default state", () => {
+    expect(wrapper.state()).toEqual({
+      key: null,
+      text: "",
+      comments: []
+    });
   });
 
 })
