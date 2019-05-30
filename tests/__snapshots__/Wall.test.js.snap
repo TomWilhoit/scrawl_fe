@@ -10,7 +10,6 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
     }
   }
 >
-  <Component />
   <TouchableOpacity
     activeOpacity={0.2}
     onPress={[Function]}
@@ -35,29 +34,25 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "backgroundColor": "white",
-        "fontSize": 25,
-        "height": 45,
-        "textAlign": "center",
-        "width": "100%",
+        "justifyContent": "center",
+        "marginTop": 35,
       }
     }
-  >
-    Improper City
-  </Component>
-  <Component
+  />
+  <ScrollView
     style={
       Object {
         "backgroundColor": "lightblue",
-        "height": 200,
+        "maxHeight": 400,
+        "stickyBottom": true,
         "width": "100%",
       }
     }
   >
     <Component>
-      You are too far away to view this wall.
+      You cannot reach this wall. Turn back while you can.
     </Component>
-  </Component>
+  </ScrollView>
   <TextInput
     allowFontScaling={true}
     onChangeText={[Function]}
