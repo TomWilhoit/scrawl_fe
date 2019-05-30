@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
-    }
+    },
+    "description": "This is the front-end for the Scrawl app. A proximity based, anonymous chat server. A secondary layer of communication for the workplace, school, doctor's office, or anywhere in the world you would like to write on a proverbial \"wall.\" We save no user info, track no data, and never will.",
+    "githubUrl": "https://github.com/TomWilhoit/scrawl_fe"
   }
+}
