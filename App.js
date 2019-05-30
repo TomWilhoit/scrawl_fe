@@ -29,8 +29,7 @@ export default class App extends React.Component {
         },
         { quote: `I f****** hate Django`, author: "Scott" }
       ],
-      markers: [],
-      time: null
+      markers: []
     };
   }
 
@@ -46,9 +45,6 @@ export default class App extends React.Component {
     });
   };
 
-
-
-
   getStartingWalls = async (lat, long) => {
     const url = `https://scrawlr.herokuapp.com/api/v1/walls/nearest?lat=${lat}&lng=${long}`;
     try {
@@ -56,12 +52,11 @@ export default class App extends React.Component {
       let responseJson = await response.json();
       this.setState({
         markers: responseJson
-      })
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
-  
 
   getStartLocation = async () => {
     return await navigator.geolocation.getCurrentPosition(
@@ -81,14 +76,19 @@ export default class App extends React.Component {
   };
 
   checkProximity = (lat, lng) => {
-    const wallLat= lat
-    const wallLng= lng
-    if(((wallLat + 0.0015 >= this.state.currentLatitude) || (wallLat + 0.0015 >= this.state.currentLatitude)) && ((wallLng - 0.0015 <= this.state.currentLongitude) || (wallLng - 0.0015 <= this.state.currentLongitude)) ){
-      return true
-    }else{
-      return false
+    const wallLat = lat;
+    const wallLng = lng;
+    if (
+      (wallLat + 0.0015 >= this.state.currentLatitude ||
+        wallLat + 0.0015 >= this.state.currentLatitude) &&
+      (wallLng - 0.0015 <= this.state.currentLongitude ||
+        wallLng - 0.0015 <= this.state.currentLongitude)
+    ) {
+      return true;
+    } else {
+      return false;
     }
-  }
+  };
 
   onPress = num => {
     this.setState({
@@ -98,59 +98,63 @@ export default class App extends React.Component {
   };
 
   displayNearbyWalls = () => {
-    console.log(this.state.markers)
-    if(this.state.markers.length < 1){
-      return(
-        <Text style={{color: 'white', fontSize: 35, marginTop: 15, marginBottom: 15}}>No Nearby Walls! Try creating one, wierdo.</Text>
-      )
-    }else{
-      return(
+    if (this.state.markers.length < 1) {
+      return (
+        <Text
+          style={{
+            color: "white",
+            fontSize: 35,
+            marginTop: 15,
+            marginBottom: 15
+          }}
+        >
+          No Nearby Walls! Try creating one, wierdo.
+        </Text>
+      );
+    } else {
+      return (
         <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%"
-            }}>
-          {this.state.markers.slice(0,5).map((marker, index) => {
-            return(
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%"
+          }}
+        >
+          {this.state.markers.slice(0, 5).map((marker, index) => {
+            return (
               <TouchableOpacity
-              key={index}
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(index)}
-            >
-              <Text
+                key={index}
                 style={{
-                  textAlign: "center",
-                  justifyContent: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
+                  width: "100%",
+                  backgroundColor: "#27476e",
+                  borderColor: "#2d232e",
+                  borderStyle: "solid",
+                  borderWidth: 0.5
                 }}
+                onPress={() => this.onPress(index)}
               >
-                {marker.name} 
-              </Text>
-            </TouchableOpacity>
-            )
+                <Text
+                  style={{
+                    textAlign: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    color: "#f7f9f9",
+                    fontSize: 20,
+                    marginTop: 4
+                  }}
+                >
+                  {marker.name}
+                </Text>
+              </TouchableOpacity>
+            );
           })}
         </View>
-        
-      )
+      );
     }
-  }
+  };
 
   render() {
-    const {
-      currentLatitude,
-      currentLongitude,
-      displayedPage
-    } = this.state;
+    const { currentLatitude, currentLongitude, displayedPage } = this.state;
     if (currentLatitude == null && displayedPage === "home") {
       return (
         <View
@@ -191,7 +195,14 @@ export default class App extends React.Component {
         </View>
       );
     } else if (displayedPage === "CreateWall") {
-      return <CreateWall checkProximity={this.checkProximity} lat={this.state.currentLatitude} lng={this.state.currentLongitude} onPress={this.onPress} />;
+      return (
+        <CreateWall
+          checkProximity={this.checkProximity}
+          lat={this.state.currentLatitude}
+          lng={this.state.currentLongitude}
+          onPress={this.onPress}
+        />
+      );
     } else if (currentLatitude !== null && displayedPage === "home") {
       return (
         <View
@@ -253,7 +264,7 @@ export default class App extends React.Component {
               alignItems: "center"
             }}
           >
-          {this.displayNearbyWalls()}
+            {this.displayNearbyWalls()}
             <TouchableOpacity
               style={{
                 width: "100%",

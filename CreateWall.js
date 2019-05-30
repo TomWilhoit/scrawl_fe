@@ -33,7 +33,6 @@ export default class CreateWall extends React.Component {
       const lat = this.props.lat;
       const lng = this.props.lng;
       const check = this.props.checkProximity(lat, lng)
-      console.log(check)
       if(!check){
         const options = {
           method: "POST",
