@@ -39,20 +39,6 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
       }
     }
   />
-  <ScrollView
-    style={
-      Object {
-        "backgroundColor": "lightblue",
-        "maxHeight": 400,
-        "stickyBottom": true,
-        "width": "100%",
-      }
-    }
-  >
-    <Component>
-      You cannot reach this wall. Turn back while you can.
-    </Component>
-  </ScrollView>
   <TextInput
     allowFontScaling={true}
     onChangeText={[Function]}
@@ -67,7 +53,22 @@ exports[`Wall should match the snapshot when on the Home page 1`] = `
       }
     }
     underlineColorAndroid="transparent"
+    value=""
   />
+  <ScrollView
+    style={
+      Object {
+        "backgroundColor": "lightblue",
+        "maxHeight": 400,
+        "stickyBottom": true,
+        "width": "100%",
+      }
+    }
+  >
+    <Component>
+      You cannot reach this wall. Turn back while you can.
+    </Component>
+  </ScrollView>
   <TouchableOpacity
     activeOpacity={0.2}
     onPress={[Function]}

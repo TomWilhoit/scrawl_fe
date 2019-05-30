@@ -4,9 +4,7 @@ import Wall from "./Wall";
 import CreateWall from "./CreateWall";
 import MapView, { Marker } from "react-native-maps";
 import { mapStyle } from "./styles";
-import WS from "react-native-websocket";
 import { Font } from "expo";
-import { fetchData } from "./utils/fetchData";
 
 export default class App extends React.Component {
   constructor() {
