@@ -55,7 +55,8 @@ export default class Wall extends React.Component {
           body: JSON.stringify({ comment: newComment })
         };
         this.setState({
-          comments: [...this.state.comments, newComment]
+          comments: [...this.state.comments, newComment],
+          text: ''
         });
         const pk = this.props.currentWall.pk;
         const url = `https://scrawlr.herokuapp.com/api/v1/walls/${pk}/comments`;
@@ -159,6 +160,18 @@ export default class Wall extends React.Component {
             </Text>
           ) : null}
         </View>
+        <TextInput
+          style={{
+            height: 60,
+            backgroundColor: "white",
+            width: "100%",
+            textAlign: "center",
+            justifyContent: "center"
+          }}
+          value={this.state.text}
+          placeholder="Say something, anything bruh it's your world."
+          onChangeText={text => this.setState({ text })}
+        />
         <ScrollView
           style={{
             maxHeight: 400,
@@ -169,17 +182,6 @@ export default class Wall extends React.Component {
         >
           {this.displayComments()}
         </ScrollView>
-        <TextInput
-          style={{
-            height: 60,
-            backgroundColor: "white",
-            width: "100%",
-            textAlign: "center",
-            justifyContent: "center"
-          }}
-          placeholder="Say something, anything bruh it's your world."
-          onChangeText={text => this.setState({ text })}
-        />
         <TouchableOpacity
           style={{
             height: 100,
