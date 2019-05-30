@@ -29,7 +29,8 @@ export default class App extends React.Component {
         },
         { quote: `I f****** hate Django`, author: "Scott" }
       ],
-      markers: []
+      markers: [],
+      time: null
     };
   }
 
@@ -46,8 +47,10 @@ export default class App extends React.Component {
   };
 
 
+
+
   getStartingWalls = async (lat, long) => {
-    const url = `http://127.0.0.1:8000/api/v1/walls/nearest?lat=${lat}&lng=${long}`;
+    const url = `https://scrawlr.herokuapp.com/api/v1/walls/nearest?lat=${lat}&lng=${long}`;
     try {
       const response = await fetch(url);
       let responseJson = await response.json();
@@ -90,16 +93,63 @@ export default class App extends React.Component {
   onPress = num => {
     this.setState({
       displayedPage: `${num}`,
-      currentWall: this.state.markers[num - 1]
+      currentWall: this.state.markers[num]
     });
   };
+
+  displayNearbyWalls = () => {
+    console.log(this.state.markers)
+    if(this.state.markers.length < 1){
+      return(
+        <Text style={{color: 'white', fontSize: 35, marginTop: 15, marginBottom: 15}}>No Nearby Walls! Try creating one, wierdo.</Text>
+      )
+    }else{
+      return(
+        <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%"
+            }}>
+          {this.state.markers.slice(0,5).map((marker, index) => {
+            return(
+              <TouchableOpacity
+              key={index}
+              style={{
+                width: "100%",
+                backgroundColor: "#27476e",
+                borderColor: "#2d232e",
+                borderStyle: "solid",
+                borderWidth: 0.5
+              }}
+              onPress={() => this.onPress(index)}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  color: "#f7f9f9",
+                  fontSize: 20,
+                  marginTop: 4
+                }}
+              >
+                {marker.name} 
+              </Text>
+            </TouchableOpacity>
+            )
+          })}
+        </View>
+        
+      )
+    }
+  }
 
   render() {
     const {
       currentLatitude,
       currentLongitude,
-      displayedPage,
-      fontLoaded
+      displayedPage
     } = this.state;
     if (currentLatitude == null && displayedPage === "home") {
       return (
@@ -203,117 +253,7 @@ export default class App extends React.Component {
               alignItems: "center"
             }}
           >
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(1)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  justifyContent: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
-                }}
-              >
-                {this.state.markers[0].name}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(2)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
-                }}
-              >
-                {this.state.markers[1].name}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(3)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
-                }}
-              >
-                {this.state.markers[2].name}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(4)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
-                }}
-              >
-                {this.state.markers[3].name}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                backgroundColor: "#27476e",
-                borderColor: "#2d232e",
-                borderStyle: "solid",
-                borderWidth: 0.5
-              }}
-              onPress={() => this.onPress(5)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#f7f9f9",
-                  fontSize: 20,
-                  marginTop: 4
-                }}
-              >
-                {this.state.markers[4].name}
-              </Text>
-            </TouchableOpacity>
+          {this.displayNearbyWalls()}
             <TouchableOpacity
               style={{
                 width: "100%",
@@ -343,6 +283,7 @@ export default class App extends React.Component {
     } else if (currentLatitude !== null && displayedPage !== "Home") {
       return (
         <Wall
+          fontLoaded={this.state.fontLoaded}
           checkProximity={this.checkProximity}
           currentWall={this.state.currentWall}
           onPress={this.onPress}

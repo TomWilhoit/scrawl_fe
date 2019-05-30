@@ -15,7 +15,7 @@ export default class CreateWall extends React.Component {
 
   gatherComments = async () => {
     const pk = this.props.currentWall.pk;
-    const url = `http://127.0.0.1:8000/api/v1/walls/${pk}`;
+    const url = `https://scrawlr.herokuapp.com//api/v1/walls/${pk}`;
     try {
       const response = await fetch(url);
       let responseJson = await response.json();
@@ -42,7 +42,7 @@ export default class CreateWall extends React.Component {
           },
           body: JSON.stringify({ comment: newComment, name: newWall, lat: lat, lng: lng })
         };
-        const url = `http://localhost:8000/api/v1/walls`;
+        const url = `https://scrawlr.herokuapp.com/api/v1/walls`;
         try {
           const response = await fetch(url, options);
           let responseJson = await response.json();

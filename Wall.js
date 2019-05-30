@@ -1,5 +1,11 @@
 import React from "react";
-import { Text, View, TouchableOpacity, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  ScrollView
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 var Filter = require("bad-words");
 
@@ -15,16 +21,18 @@ export default class Wall extends React.Component {
 
   componentDidMount = () => {
     this.gatherComments();
+    setInterval(() => this.gatherComments(), 1000);
   };
 
   gatherComments = async () => {
     const pk = this.props.currentWall.pk;
-    const url = `http://127.0.0.1:8000/api/v1/walls/${pk}`;
+    const url = `https://scrawlr.herokuapp.com/api/v1/walls/${pk}`;
     try {
       const response = await fetch(url);
       let responseJson = await response.json();
+      const reversed = responseJson.comments.reverse();
       this.setState({
-        comments: responseJson.comments
+        comments: reversed
       });
     } catch (error) {
       console.log(error);
@@ -32,24 +40,36 @@ export default class Wall extends React.Component {
   };
 
   onSubmit = async () => {
-    const newComment = this.state.text;
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/JSON"
-      },
-      body: JSON.stringify({ comment: newComment })
-    };
-    this.setState({
-      comments: [...this.state.comments, newComment]
-    });
-    const pk = this.props.currentWall.pk;
-    const url = `http://localhost:8000/api/v1/walls/${pk}/comments`;
-    try {
-      const response = await fetch(url, options);
-      let responseJson = await response.json();
-    } catch (error) {
-      console.log(error);
+    const check = this.props.checkProximity(
+      this.props.currentWall.lat,
+      this.props.currentWall.lng
+    );
+    if (check) {
+      const newComment = this.state.text;
+      if (newComment.length > 0) {
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/JSON"
+          },
+          body: JSON.stringify({ comment: newComment })
+        };
+        this.setState({
+          comments: [...this.state.comments, newComment]
+        });
+        const pk = this.props.currentWall.pk;
+        const url = `https://scrawlr.herokuapp.com/api/v1/walls/${pk}/comments`;
+        try {
+          const response = await fetch(url, options);
+          let responseJson = await response.json();
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        alert("Type more?");
+      }
+    } else {
+      alert("YOU DON'T EVEN GO HERE");
     }
   };
 
@@ -58,12 +78,24 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (check === true) {
+    if (check) {
       if (this.state.comments.length > 0) {
         filter = new Filter();
         const commentsDisplay = this.state.comments.map((comment, index) => {
           let cleanComment = filter.clean(comment);
-          return <Text key={index}>{cleanComment}</Text>;
+          return (
+            <Text
+              style={{
+                paddingLeft: 10,
+                margin: 5,
+                fontSize: 22.5,
+                color: "#27476e"
+              }}
+              key={index}
+            >
+              {cleanComment}
+            </Text>
+          );
         });
         return commentsDisplay;
       } else {
@@ -82,7 +114,7 @@ export default class Wall extends React.Component {
         );
       }
     } else {
-      return <Text>You are too far away to view this wall.</Text>;
+      return <Text>You cannot reach this wall. Turn back while you can.</Text>;
     }
   };
 
@@ -95,7 +127,6 @@ export default class Wall extends React.Component {
           backgroundColor: "#006992"
         }}
       >
-        <Text>{this.props.currentWall.name}</Text>
         <TouchableOpacity
           style={{
             height: 35,
@@ -108,27 +139,36 @@ export default class Wall extends React.Component {
         >
           <Icon name="angle-left" size={30} color="white" />
         </TouchableOpacity>
-        <Text
-          style={{
-            height: 45,
-            backgroundColor: "white",
-            width: "100%",
-            textAlign: "center",
-            fontSize: 25,
-            alignItems: "center"
-          }}
-        >
-          {this.props.currentWall.title}
-        </Text>
         <View
           style={{
-            height: 200,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 35
+          }}
+        >
+          {this.props.fontLoaded ? (
+            <Text
+              style={{
+                fontFamily: "PermanentMarker",
+                fontSize: 30,
+                color: "#f7f9f9",
+                fontSize: 30
+              }}
+            >
+              {this.props.currentWall.name}
+            </Text>
+          ) : null}
+        </View>
+        <ScrollView
+          style={{
+            maxHeight: 400,
             backgroundColor: "lightblue",
-            width: "100%"
+            width: "100%",
+            stickyBottom: true
           }}
         >
           {this.displayComments()}
-        </View>
+        </ScrollView>
         <TextInput
           style={{
             height: 60,
