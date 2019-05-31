@@ -79,7 +79,7 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (check) {
+    if (!check) {
       if (this.state.comments.length > 0) {
         filter = new Filter();
         const commentsDisplay = this.state.comments.map((comment, index) => {
