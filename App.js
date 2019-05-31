@@ -78,9 +78,9 @@ export default class App extends React.Component {
     const wallLng = lng;
     if (
       (wallLat + 0.0015 >= this.state.currentLatitude ||
-        wallLat + 0.0015 >= this.state.currentLatitude) &&
-      (wallLng - 0.0015 <= this.state.currentLongitude ||
-        wallLng - 0.0015 <= this.state.currentLongitude)
+        wallLat - 0.0015 <= this.state.currentLatitude) &&
+      (wallLng - 0.0015 >= this.state.currentLongitude ||
+        wallLng + 0.0015 <= this.state.currentLongitude)
     ) {
       return true;
     } else {
