@@ -15,13 +15,14 @@ export default class Wall extends React.Component {
     this.state = {
       key: null,
       text: "",
-      comments: []
+      comments: null
     };
   }
 
   componentDidMount = () => {
     this.gatherComments();
     setInterval(() => this.gatherComments(), 1000);
+
   };
 
   gatherComments = async () => {
@@ -31,8 +32,9 @@ export default class Wall extends React.Component {
       const response = await fetch(url);
       let responseJson = await response.json();
       const reversed = responseJson.comments.reverse();
+      const reversedTwice = reversed.reverse()
       this.setState({
-        comments: reversed
+        comments: reversedTwice
       });
     } catch (error) {
       console.log(error);
@@ -44,7 +46,7 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (!check) {
+    if (check) {
       const newComment = this.state.text;
       if (newComment.length > 0) {
         const options = {
