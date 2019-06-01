@@ -44,7 +44,7 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (check) {
+    if (!check) {
       const newComment = this.state.text;
       if (newComment.length > 0) {
         const options = {
@@ -79,8 +79,23 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (!check) {
-      if (this.state.comments.length > 0) {
+    console.log('Wall Check method', check)
+    if (check) {
+      if(this.state.comments === null){
+        return (
+          <Text
+            style={{
+              marginTop: 130,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#eaeaea",
+              fontSize: 20
+            }}
+          >
+            LOADING COMMENTS
+          </Text>
+        );
+    }else if (this.state.comments.length > 0) {
         filter = new Filter();
         const commentsDisplay = this.state.comments.map((comment, index) => {
           let cleanComment = filter.clean(comment);
@@ -99,7 +114,7 @@ export default class Wall extends React.Component {
           );
         });
         return commentsDisplay;
-      } else {
+      } else if(this.state.comments.length === 0) {
         return (
           <Text
             style={{
@@ -115,7 +130,17 @@ export default class Wall extends React.Component {
         );
       }
     } else {
-      return <Text>You cannot reach this wall. Turn back while you can.</Text>;
+      return <Text
+      style={{
+        marginTop: 130,
+        textAlign: "center",
+        fontWeight: "bold",
+        color: "#eaeaea",
+        fontSize: 20
+      }}
+    >
+      You are too far from this wall. 
+    </Text>;
     }
   };
 
