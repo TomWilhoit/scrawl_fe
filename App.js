@@ -74,24 +74,41 @@ export default class App extends React.Component {
   };
 
   checkProximity = (lat, lng) => {
-    const wallLat = lat;
-    const wallLng = lng;
+    // Let a,b be the current lat,long
+    // Let r be the radius
+    // Let x,y be the lat,long that you're checking
+    // If `sqrt(abs(a-x)^2 + abs(b-y)^2) < r`, then x,y is inside the circle centered at a,b with radius r.
+    const { currentLatitude, currentLongitude } = this.state;
+    const r = 1.42;
+    let a = currentLatitude;
+    let b = currentLongitude;
+    let x = lat;
+    let y = lng;
     if (
-      (wallLat + 0.0015 >= this.state.currentLatitude ||
-        wallLat - 0.0015 <= this.state.currentLatitude) &&
-      (wallLng - 0.0015 >= this.state.currentLongitude ||
-        wallLng + 0.0015 <= this.state.currentLongitude)
+      Math.sqrt((Math.pow(Math.abs(a - x)), 2) + (Math.pow(Math.abs(b - y), 2))) < r
     ) {
+      console.log(true);
       return true;
     } else {
+      console.log(false);
       return false;
     }
   };
 
   onPress = num => {
+    numberHolder = num;
+    if (num === 0) {
+      num = 0;
+    } else if (num === "home") {
+      num = "home";
+    } else if (num === "CreateWall") {
+      num = "CreateWall";
+    } else {
+      num = num - 1;
+    }
     this.setState({
       displayedPage: `${num}`,
-      currentWall: this.state.markers[num]
+      currentWall: this.state.markers[numberHolder]
     });
   };
 
@@ -251,8 +268,7 @@ export default class App extends React.Component {
                   longitude: marker.lng
                 }}
                 title={marker.name}
-                onCalloutPress={() => this.onPress(index + 1)}
-                on
+                onCalloutPress={() => this.onPress(index)}
               />
             ))}
           </MapView>

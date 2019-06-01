@@ -15,13 +15,14 @@ export default class Wall extends React.Component {
     this.state = {
       key: null,
       text: "",
-      comments: []
+      comments: null
     };
   }
 
   componentDidMount = () => {
     this.gatherComments();
     setInterval(() => this.gatherComments(), 1000);
+
   };
 
   gatherComments = async () => {
@@ -31,8 +32,9 @@ export default class Wall extends React.Component {
       const response = await fetch(url);
       let responseJson = await response.json();
       const reversed = responseJson.comments.reverse();
+      const reversedTwice = reversed.reverse()
       this.setState({
-        comments: reversed
+        comments: reversedTwice
       });
     } catch (error) {
       console.log(error);
@@ -79,8 +81,23 @@ export default class Wall extends React.Component {
       this.props.currentWall.lat,
       this.props.currentWall.lng
     );
-    if (!check) {
-      if (this.state.comments.length > 0) {
+    console.log('Wall Check method', check)
+    if (check) {
+      if(this.state.comments === null){
+        return (
+          <Text
+            style={{
+              marginTop: 130,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#eaeaea",
+              fontSize: 20
+            }}
+          >
+            LOADING COMMENTS
+          </Text>
+        );
+    }else if (this.state.comments.length > 0) {
         filter = new Filter();
         const commentsDisplay = this.state.comments.map((comment, index) => {
           let cleanComment = filter.clean(comment);
@@ -99,7 +116,7 @@ export default class Wall extends React.Component {
           );
         });
         return commentsDisplay;
-      } else {
+      } else if(this.state.comments.length === 0) {
         return (
           <Text
             style={{
@@ -115,7 +132,17 @@ export default class Wall extends React.Component {
         );
       }
     } else {
-      return <Text>You cannot reach this wall. Turn back while you can.</Text>;
+      return <Text
+      style={{
+        marginTop: 130,
+        textAlign: "center",
+        fontWeight: "bold",
+        color: "#eaeaea",
+        fontSize: 20
+      }}
+    >
+      You are too far from this wall. 
+    </Text>;
     }
   };
 

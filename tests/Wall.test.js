@@ -25,7 +25,7 @@ describe("Wall", () => {
     expect(wrapper.state()).toEqual({
       key: null,
       text: "",
-      comments: []
+      comments: null
     });
   });
 
