@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -26,7 +26,8 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.tomwilhoit.scrawl"
+      "package": "com.tomwilhoit.scrawl",
+      "versionCode": 2
     },
     "description": "This is the front-end for the Scrawl app. A proximity based, anonymous chat server. A secondary layer of communication for the workplace, school, doctor's office, or anywhere in the world you would like to write on a proverbial \"wall.\" We save no user info, track no data, and never will.",
     "githubUrl": "https://github.com/TomWilhoit/scrawl_fe"
