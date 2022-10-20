@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "bad-words": "^3.0.2",
-    "expo": "^32.0.0",
+    "expo": "^46.0.16",
     "jest": "^24.8.0",
     "jest-enzyme": "^7.0.2",
     "react": "16.5.0",
